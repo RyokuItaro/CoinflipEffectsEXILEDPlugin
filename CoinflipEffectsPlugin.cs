@@ -11,6 +11,8 @@ namespace CoinflipEffectsPlugin
 {
     public class CoinflipEffectsPlugin : Plugin<Config>
     {
+        public override Version Version => new Version(1, 0, 0);
+        public override string Author => "RyokuItaro";
         public static CoinflipEffectsPlugin Singleton;
         public static CoinflipEffectsPlugin Instance => Singleton;
         public override PluginPriority Priority { get; } = PluginPriority.Medium;
