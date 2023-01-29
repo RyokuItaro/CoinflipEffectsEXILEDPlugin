@@ -12,7 +12,7 @@ namespace CoinflipEffectsPlugin
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; }
-        public bool GiveEveryoneACoin { get; set; } = false;
+        public bool GiveEveryoneACoin { get; set; } = true;
         public float BlackoutTime { get; set; } = 15f; 
         public HashSet<EffectType> NegativeEffects { get; set; } = new HashSet<EffectType>
         {
