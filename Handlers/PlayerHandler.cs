@@ -64,12 +64,12 @@ namespace CoinflipEffectsPlugin.Handlers
                         ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.None, RoleSpawnFlags.None);
                         ev.Player.Broadcast(1, "Turn into SCP049-2");
                     }
-                    else if (21 <= determineEvent && determineEvent <= 25)
+                    else if (21 <= determineEvent && determineEvent <= 30)
                     {
                         ev.Player.Hurt(ev.Player.Health - 1);
                         ev.Player.Broadcast(1, "Set HP to 1");
                     }
-                    else if (26 <= determineEvent && determineEvent <= 30)
+                    else if (31 <= determineEvent && determineEvent <= 40)
                     {
                         if (Player.Get(Side.Scp).Any())
                         {
@@ -78,100 +78,39 @@ namespace CoinflipEffectsPlugin.Handlers
                             ev.Player.Broadcast(1, "TP to SCP Player");
                         }
                     }
-                    else if (31 <= determineEvent && determineEvent <= 40)
+                    else if (41 <= determineEvent && determineEvent <= 51)
                     {
+                        var pos = rnd.Next(5);
                         switch (rnd.Next(1, 5))
                         {
                             case 1:
                                 Cassie.MessageTranslated(
-                                    $"{SCPListForFakeTerminationPhonetic[rnd.Next(5)]} SUCCESSFULLY TERMINATED. TERMINATION CAUSE UNSPECIFIED",
-                                    $"{SCPListForFakeTerminationMsg[rnd.Next(5)]} pomyślnie zneutralizowany, przyczyna nieznana."
+                                    $"{SCPListForFakeTerminationPhonetic[pos]} SUCCESSFULLY TERMINATED. TERMINATION CAUSE UNSPECIFIED",
+                                    $"{SCPListForFakeTerminationMsg[pos]} pomyślnie zneutralizowany, przyczyna nieznana."
                                     );
                                 break;
                             case 2:
                                 Cassie.MessageTranslated(
-                                    $"{SCPListForFakeTerminationPhonetic[rnd.Next(5)]} CONTAINED SUCCESSFULLY BY CLASS D PERSONNEL",
-                                    $"{SCPListForFakeTerminationMsg[rnd.Next(5)]} pomyślnie zabezpieczony przez personel klasy D."
+                                    $"{SCPListForFakeTerminationPhonetic[pos]} CONTAINED SUCCESSFULLY BY CLASS D PERSONNEL",
+                                    $"{SCPListForFakeTerminationMsg[pos]} pomyślnie zabezpieczony przez personel klasy D."
                                     );
                                 break;
                             case 3:
                                 Cassie.MessageTranslated(
-                                    $"{SCPListForFakeTerminationPhonetic[rnd.Next(5)]} CONTAINED SUCCESSFULLY BY SCIENCE PERSONNEL",
-                                    $"{SCPListForFakeTerminationMsg[rnd.Next(5)]} pomyślnie zabezpieczony przez personel badawczy."
+                                    $"{SCPListForFakeTerminationPhonetic[pos]} CONTAINED SUCCESSFULLY BY SCIENCE PERSONNEL",
+                                    $"{SCPListForFakeTerminationMsg[pos]} pomyślnie zabezpieczony przez personel badawczy."
                                     );
                                 break;
                             case 4:
                                 Cassie.MessageTranslated(
-                                    $"{SCPListForFakeTerminationPhonetic[rnd.Next(5)]} SUCCESSFULLY TERMINATED BY AUTOMATIC SECURITY SYSTEM",
-                                    $"{SCPListForFakeTerminationMsg[rnd.Next(5)]} pomyślnie zneutralizowany przez automatyczny system bezpieczeństwa."
+                                    $"{SCPListForFakeTerminationPhonetic[pos]} SUCCESSFULLY TERMINATED BY AUTOMATIC SECURITY SYSTEM",
+                                    $"{SCPListForFakeTerminationMsg[pos]} pomyślnie zneutralizowany przez automatyczny system bezpieczeństwa."
                                     );
                                 break;
                         }
                         ev.Player.Broadcast(1, "Fake SCP Termination message");
                     }
-                    else if (41 <= determineEvent && determineEvent <= 50)
-                    {
-                        ev.Player.Handcuff(ev.Player);
-                        Timing.CallDelayed(15f, () =>
-                        {
-                            if (ev.Player.IsCuffed)
-                            {
-                                ev.Player.RemoveHandcuffs();
-                            }
-                        });
-                        ev.Player.Broadcast(1, "Handcuffs");
-                    }
                     else if (51 <= determineEvent && determineEvent <= 60)
-                    {
-                        ev.Player.Teleport(Door.Get(DoorType.PrisonDoor));
-                        ev.Player.Broadcast(1, "TP to Class D Prison");
-                    }
-                    else if (61 <= determineEvent && determineEvent <= 65)
-                    {
-                        ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
-                        grenade.FuseTime = 0.01f;
-                        grenade.SpawnActive(ev.Player.Position + Vector3.up);
-                        Cassie.MessageTranslated("Explosion anomalies has been noticed in the facility", "W placówce wykryto dziwne anomalie wybuchowe");
-                    }
-                    else if (66 <= determineEvent && determineEvent <= 70)
-                    {
-                        ev.Player.EnableEffect(EffectType.Corroding);
-                        ev.Player.Broadcast(1, "TP to Pocket Dimension");
-                    }
-                    else if (71 <= determineEvent && determineEvent <= 80)
-                    {
-                        Map.TurnOffAllLights(config.BlackoutTime, ev.Player.Zone);
-                        ev.Player.Broadcast(1, "Lights out");
-                    }
-                    else if (81 <= determineEvent && determineEvent <= 90)
-                    {
-                        if (!Warhead.IsDetonated)
-                        {
-                            if (Warhead.IsInProgress)
-                            {
-                                Warhead.Stop();
-                            }
-                            else
-                            {
-                                Warhead.Start();
-                                Timing.CallDelayed(15f, () =>
-                                {
-                                    if (!Warhead.IsDetonated && Warhead.IsInProgress)
-                                    {
-                                        Warhead.Stop();
-
-                                        foreach (var door in Door.List)
-                                        {
-                                            door.IsOpen = false;
-                                        }
-                                        Cassie.MessageTranslated("WARHEAD ERROR", "Sory, nie ten przycisk");
-                                    }
-                                });
-                            }
-                        }
-                        ev.Player.Broadcast(1, "Fake WARHEAD detonation");
-                    }
-                    else if (91 <= determineEvent && determineEvent <= 100)
                     {
                         Scp244Pickup scp244 = (Scp244Pickup)Pickup.Create(ItemType.SCP244b);
                         scp244.State = Scp244State.Active;
@@ -180,6 +119,28 @@ namespace CoinflipEffectsPlugin.Handlers
                         scp244.IsLocked = true;
                         scp244.Spawn();
                         ev.Player.Broadcast(1, "A VASE?!");
+                    }
+                    else if (61 <= determineEvent && determineEvent <= 70)
+                    {
+                        ev.Player.Teleport(Door.Get(DoorType.PrisonDoor));
+                        ev.Player.Broadcast(1, "TP to Class D Prison");
+                    }
+                    else if (71 <= determineEvent && determineEvent <= 80)
+                    {
+                        ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
+                        grenade.FuseTime = 0.01f;
+                        grenade.SpawnActive(ev.Player.Position + Vector3.up);
+                        Cassie.MessageTranslated("Explosion anomalies has been noticed in the facility", "W placówce wykryto dziwne anomalie wybuchowe");
+                    }
+                    else if (81 <= determineEvent && determineEvent <= 90)
+                    {
+                        ev.Player.EnableEffect(EffectType.Corroding);
+                        ev.Player.Broadcast(1, "TP to Pocket Dimension");
+                    }
+                    else if (91 <= determineEvent && determineEvent <= 100)
+                    {
+                        Map.TurnOffAllLights(config.BlackoutTime, ev.Player.Zone);
+                        ev.Player.Broadcast(1, "Lights out");
                     }
                 }
                 else
@@ -203,7 +164,7 @@ namespace CoinflipEffectsPlugin.Handlers
                     }
                     if (11 <= determineEvent && determineEvent <= 20)
                     {
-                        ev.Player.MaxHealth *= 1.15f;
+                        ev.Player.MaxHealth *= 1.25f;
                         ev.Player.Heal(ev.Player.MaxHealth);
                         ev.Player.Broadcast(1, "Max HP increased");
                     }
@@ -227,8 +188,8 @@ namespace CoinflipEffectsPlugin.Handlers
                     }
                     else if (31 <= determineEvent && determineEvent <= 40)
                     {
-                        ev.Player.Teleport(Door.Get(DoorType.GateA));
-                        ev.Player.Broadcast(1, "TP to Gate A");
+                        ev.Player.EnableEffect(EffectType.MovementBoost);
+                        ev.Player.Broadcast(1, "Im speed");
                     }
                     else if (41 <= determineEvent && determineEvent <= 50)
                     {
@@ -252,14 +213,14 @@ namespace CoinflipEffectsPlugin.Handlers
                     {
                         Scp330 bag = (Scp330)Item.Create(ItemType.SCP330);
                         IEnumerable<CandyKindID> candiesToAdd = new[] {
-                            (CandyKindID)rnd.Next(0,8),
-                            (CandyKindID)rnd.Next(0,7),
-                            (CandyKindID)rnd.Next(0,7),
-                            (CandyKindID)rnd.Next(0,7),
-                            (CandyKindID)rnd.Next(0,7),
-                            (CandyKindID)rnd.Next(0,7),
-                            (CandyKindID)rnd.Next(0,7),
-                            (CandyKindID)rnd.Next(0,8)
+                            (CandyKindID)rnd.Next(1,8),
+                            (CandyKindID)rnd.Next(1,8),
+                            (CandyKindID)rnd.Next(1,8),
+                            (CandyKindID)rnd.Next(1,8),
+                            (CandyKindID)rnd.Next(1,4),
+                            (CandyKindID)rnd.Next(1,4),
+                            (CandyKindID)rnd.Next(1,4),
+                            (CandyKindID)rnd.Next(1,4)
                             };
                         bag.AddCandy(candiesToAdd, out var stat);
                         ev.Player.AddItem(bag);
